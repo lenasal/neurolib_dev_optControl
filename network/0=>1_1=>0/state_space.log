@@ -1,0 +1,697 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2021.7.6)  22 DEC 2021 13:26
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**state_space.tex
+(./state_space.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-01-09> xparse <2020-03-03>
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+)
+\c@part=\count177
+\c@section=\count178
+\c@subsection=\count179
+\c@subsubsection=\count180
+\c@paragraph=\count181
+\c@subparagraph=\count182
+\c@figure=\count183
+\c@table=\count184
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks15
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen139
+\Gin@req@width=\dimen140
+)
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+\Gm@cnth=\count185
+\Gm@cntv=\count186
+\c@Gm@tempcnt=\count187
+\Gm@bindingoffset=\dimen141
+\Gm@wd@mp=\dimen142
+\Gm@odd@mp=\dimen143
+\Gm@even@mp=\dimen144
+\Gm@layoutwidth=\dimen145
+\Gm@layoutheight=\dimen146
+\Gm@layouthoffset=\dimen147
+\Gm@layoutvoffset=\dimen148
+\Gm@dimlist=\toks16
+)
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2020-01-29 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count188
+\l__pdf_internal_box=\box47
+)
+(./state_space.aux)
+\openout1 = `state_space.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count189
+\scratchdimen=\dimen149
+\scratchbox=\box48
+\nofMPsegments=\count190
+\nofMParguments=\count191
+\everyMPshowfont=\toks17
+\MPscratchCnt=\count192
+\MPscratchDim=\dimen150
+\MPnumerator=\count193
+\makeMPintoPDFobject=\count194
+\everyMPtoPDFconversion=\toks18
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a0paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: landscape 
+* h-part:(L,W,R)=(5.69054pt, 3371.6516pt, 5.69054pt)
+* v-part:(T,H,B)=(5.69054pt, 2381.4957pt, 5.69054pt)
+* \paperwidth=3383.03267pt
+* \paperheight=2392.87677pt
+* \textwidth=3371.6516pt
+* \textheight=2381.4957pt
+* \oddsidemargin=-66.57945pt
+* \evensidemargin=-66.57945pt
+* \topmargin=-103.57945pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 18.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 18.
+<0.00_0.00.png, id=1, 2168.1pt x 722.7pt>
+File: 0.00_0.00.png Graphic file (type png)
+<use 0.00_0.00.png>
+Package pdftex.def Info: 0.00_0.00.png  used on input line 21.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.00_0.10.png, id=3, 2168.1pt x 722.7pt>
+File: 0.00_0.10.png Graphic file (type png)
+<use 0.00_0.10.png>
+Package pdftex.def Info: 0.00_0.10.png  used on input line 22.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.00_0.20.png, id=4, 2168.1pt x 722.7pt>
+File: 0.00_0.20.png Graphic file (type png)
+<use 0.00_0.20.png>
+Package pdftex.def Info: 0.00_0.20.png  used on input line 23.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.00_0.30.png, id=5, 2168.1pt x 722.7pt>
+File: 0.00_0.30.png Graphic file (type png)
+<use 0.00_0.30.png>
+Package pdftex.def Info: 0.00_0.30.png  used on input line 24.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.00_0.40.png, id=6, 2168.1pt x 722.7pt>
+File: 0.00_0.40.png Graphic file (type png)
+<use 0.00_0.40.png>
+Package pdftex.def Info: 0.00_0.40.png  used on input line 25.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.00_0.50.png, id=7, 2168.1pt x 722.7pt>
+File: 0.00_0.50.png Graphic file (type png)
+<use 0.00_0.50.png>
+Package pdftex.def Info: 0.00_0.50.png  used on input line 26.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.00_0.60.png, id=8, 2168.1pt x 722.7pt>
+File: 0.00_0.60.png Graphic file (type png)
+<use 0.00_0.60.png>
+Package pdftex.def Info: 0.00_0.60.png  used on input line 27.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.00_0.70.png, id=9, 2168.1pt x 722.7pt>
+File: 0.00_0.70.png Graphic file (type png)
+<use 0.00_0.70.png>
+Package pdftex.def Info: 0.00_0.70.png  used on input line 28.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.00_0.80.png, id=10, 2168.1pt x 722.7pt>
+File: 0.00_0.80.png Graphic file (type png)
+<use 0.00_0.80.png>
+Package pdftex.def Info: 0.00_0.80.png  used on input line 29.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.00_0.90.png, id=11, 2168.1pt x 722.7pt>
+File: 0.00_0.90.png Graphic file (type png)
+<use 0.00_0.90.png>
+Package pdftex.def Info: 0.00_0.90.png  used on input line 30.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.10_0.00.png, id=12, 2168.1pt x 722.7pt>
+File: 0.10_0.00.png Graphic file (type png)
+<use 0.10_0.00.png>
+Package pdftex.def Info: 0.10_0.00.png  used on input line 34.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.10_0.10.png, id=13, 2168.1pt x 722.7pt>
+File: 0.10_0.10.png Graphic file (type png)
+<use 0.10_0.10.png>
+Package pdftex.def Info: 0.10_0.10.png  used on input line 35.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.10_0.20.png, id=14, 2168.1pt x 722.7pt>
+File: 0.10_0.20.png Graphic file (type png)
+<use 0.10_0.20.png>
+Package pdftex.def Info: 0.10_0.20.png  used on input line 36.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.10_0.30.png, id=15, 2168.1pt x 722.7pt>
+File: 0.10_0.30.png Graphic file (type png)
+<use 0.10_0.30.png>
+Package pdftex.def Info: 0.10_0.30.png  used on input line 37.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.10_0.40.png, id=16, 2168.1pt x 722.7pt>
+File: 0.10_0.40.png Graphic file (type png)
+<use 0.10_0.40.png>
+Package pdftex.def Info: 0.10_0.40.png  used on input line 38.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.10_0.50.png, id=17, 2168.1pt x 722.7pt>
+File: 0.10_0.50.png Graphic file (type png)
+<use 0.10_0.50.png>
+Package pdftex.def Info: 0.10_0.50.png  used on input line 39.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.10_0.60.png, id=18, 2168.1pt x 722.7pt>
+File: 0.10_0.60.png Graphic file (type png)
+<use 0.10_0.60.png>
+Package pdftex.def Info: 0.10_0.60.png  used on input line 40.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.10_0.70.png, id=19, 2168.1pt x 722.7pt>
+File: 0.10_0.70.png Graphic file (type png)
+<use 0.10_0.70.png>
+Package pdftex.def Info: 0.10_0.70.png  used on input line 41.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.10_0.80.png, id=20, 2168.1pt x 722.7pt>
+File: 0.10_0.80.png Graphic file (type png)
+<use 0.10_0.80.png>
+Package pdftex.def Info: 0.10_0.80.png  used on input line 42.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.10_0.90.png, id=21, 2168.1pt x 722.7pt>
+File: 0.10_0.90.png Graphic file (type png)
+<use 0.10_0.90.png>
+Package pdftex.def Info: 0.10_0.90.png  used on input line 43.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.20_0.00.png, id=22, 2168.1pt x 722.7pt>
+File: 0.20_0.00.png Graphic file (type png)
+<use 0.20_0.00.png>
+Package pdftex.def Info: 0.20_0.00.png  used on input line 47.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.20_0.10.png, id=23, 2168.1pt x 722.7pt>
+File: 0.20_0.10.png Graphic file (type png)
+<use 0.20_0.10.png>
+Package pdftex.def Info: 0.20_0.10.png  used on input line 48.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.20_0.20.png, id=24, 2168.1pt x 722.7pt>
+File: 0.20_0.20.png Graphic file (type png)
+<use 0.20_0.20.png>
+Package pdftex.def Info: 0.20_0.20.png  used on input line 49.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.20_0.30.png, id=25, 2168.1pt x 722.7pt>
+File: 0.20_0.30.png Graphic file (type png)
+<use 0.20_0.30.png>
+Package pdftex.def Info: 0.20_0.30.png  used on input line 50.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.20_0.40.png, id=26, 2168.1pt x 722.7pt>
+File: 0.20_0.40.png Graphic file (type png)
+<use 0.20_0.40.png>
+Package pdftex.def Info: 0.20_0.40.png  used on input line 51.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.20_0.50.png, id=27, 2168.1pt x 722.7pt>
+File: 0.20_0.50.png Graphic file (type png)
+<use 0.20_0.50.png>
+Package pdftex.def Info: 0.20_0.50.png  used on input line 52.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.20_0.60.png, id=28, 2168.1pt x 722.7pt>
+File: 0.20_0.60.png Graphic file (type png)
+<use 0.20_0.60.png>
+Package pdftex.def Info: 0.20_0.60.png  used on input line 53.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.20_0.70.png, id=29, 2168.1pt x 722.7pt>
+File: 0.20_0.70.png Graphic file (type png)
+<use 0.20_0.70.png>
+Package pdftex.def Info: 0.20_0.70.png  used on input line 54.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.20_0.80.png, id=30, 2168.1pt x 722.7pt>
+File: 0.20_0.80.png Graphic file (type png)
+<use 0.20_0.80.png>
+Package pdftex.def Info: 0.20_0.80.png  used on input line 55.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.20_0.90.png, id=31, 2168.1pt x 722.7pt>
+File: 0.20_0.90.png Graphic file (type png)
+<use 0.20_0.90.png>
+Package pdftex.def Info: 0.20_0.90.png  used on input line 56.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.30_0.00.png, id=32, 2168.1pt x 722.7pt>
+File: 0.30_0.00.png Graphic file (type png)
+<use 0.30_0.00.png>
+Package pdftex.def Info: 0.30_0.00.png  used on input line 60.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.30_0.10.png, id=33, 2168.1pt x 722.7pt>
+File: 0.30_0.10.png Graphic file (type png)
+<use 0.30_0.10.png>
+Package pdftex.def Info: 0.30_0.10.png  used on input line 61.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.30_0.20.png, id=34, 2168.1pt x 722.7pt>
+File: 0.30_0.20.png Graphic file (type png)
+<use 0.30_0.20.png>
+Package pdftex.def Info: 0.30_0.20.png  used on input line 62.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.30_0.30.png, id=35, 2168.1pt x 722.7pt>
+File: 0.30_0.30.png Graphic file (type png)
+<use 0.30_0.30.png>
+Package pdftex.def Info: 0.30_0.30.png  used on input line 63.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.30_0.40.png, id=36, 2168.1pt x 722.7pt>
+File: 0.30_0.40.png Graphic file (type png)
+<use 0.30_0.40.png>
+Package pdftex.def Info: 0.30_0.40.png  used on input line 64.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.30_0.50.png, id=37, 2168.1pt x 722.7pt>
+File: 0.30_0.50.png Graphic file (type png)
+<use 0.30_0.50.png>
+Package pdftex.def Info: 0.30_0.50.png  used on input line 65.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.30_0.60.png, id=38, 2168.1pt x 722.7pt>
+File: 0.30_0.60.png Graphic file (type png)
+<use 0.30_0.60.png>
+Package pdftex.def Info: 0.30_0.60.png  used on input line 66.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.30_0.70.png, id=39, 2168.1pt x 722.7pt>
+File: 0.30_0.70.png Graphic file (type png)
+<use 0.30_0.70.png>
+Package pdftex.def Info: 0.30_0.70.png  used on input line 67.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.30_0.80.png, id=40, 2168.1pt x 722.7pt>
+File: 0.30_0.80.png Graphic file (type png)
+<use 0.30_0.80.png>
+Package pdftex.def Info: 0.30_0.80.png  used on input line 68.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.30_0.90.png, id=41, 2168.1pt x 722.7pt>
+File: 0.30_0.90.png Graphic file (type png)
+<use 0.30_0.90.png>
+Package pdftex.def Info: 0.30_0.90.png  used on input line 69.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.40_0.00.png, id=42, 2168.1pt x 722.7pt>
+File: 0.40_0.00.png Graphic file (type png)
+<use 0.40_0.00.png>
+Package pdftex.def Info: 0.40_0.00.png  used on input line 73.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.40_0.10.png, id=43, 2168.1pt x 722.7pt>
+File: 0.40_0.10.png Graphic file (type png)
+<use 0.40_0.10.png>
+Package pdftex.def Info: 0.40_0.10.png  used on input line 74.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.40_0.20.png, id=44, 2168.1pt x 722.7pt>
+File: 0.40_0.20.png Graphic file (type png)
+<use 0.40_0.20.png>
+Package pdftex.def Info: 0.40_0.20.png  used on input line 75.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.40_0.30.png, id=45, 2168.1pt x 722.7pt>
+File: 0.40_0.30.png Graphic file (type png)
+<use 0.40_0.30.png>
+Package pdftex.def Info: 0.40_0.30.png  used on input line 76.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.40_0.40.png, id=46, 2168.1pt x 722.7pt>
+File: 0.40_0.40.png Graphic file (type png)
+<use 0.40_0.40.png>
+Package pdftex.def Info: 0.40_0.40.png  used on input line 77.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.40_0.50.png, id=47, 2168.1pt x 722.7pt>
+File: 0.40_0.50.png Graphic file (type png)
+<use 0.40_0.50.png>
+Package pdftex.def Info: 0.40_0.50.png  used on input line 78.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.40_0.60.png, id=48, 2168.1pt x 722.7pt>
+File: 0.40_0.60.png Graphic file (type png)
+<use 0.40_0.60.png>
+Package pdftex.def Info: 0.40_0.60.png  used on input line 79.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.40_0.70.png, id=49, 2168.1pt x 722.7pt>
+File: 0.40_0.70.png Graphic file (type png)
+<use 0.40_0.70.png>
+Package pdftex.def Info: 0.40_0.70.png  used on input line 80.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.40_0.80.png, id=50, 2168.1pt x 722.7pt>
+File: 0.40_0.80.png Graphic file (type png)
+<use 0.40_0.80.png>
+Package pdftex.def Info: 0.40_0.80.png  used on input line 81.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.40_0.90.png, id=51, 2168.1pt x 722.7pt>
+File: 0.40_0.90.png Graphic file (type png)
+<use 0.40_0.90.png>
+Package pdftex.def Info: 0.40_0.90.png  used on input line 82.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.50_0.00.png, id=52, 2168.1pt x 722.7pt>
+File: 0.50_0.00.png Graphic file (type png)
+<use 0.50_0.00.png>
+Package pdftex.def Info: 0.50_0.00.png  used on input line 86.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.50_0.10.png, id=53, 2168.1pt x 722.7pt>
+File: 0.50_0.10.png Graphic file (type png)
+<use 0.50_0.10.png>
+Package pdftex.def Info: 0.50_0.10.png  used on input line 87.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.50_0.20.png, id=54, 2168.1pt x 722.7pt>
+File: 0.50_0.20.png Graphic file (type png)
+<use 0.50_0.20.png>
+Package pdftex.def Info: 0.50_0.20.png  used on input line 88.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.50_0.30.png, id=55, 2168.1pt x 722.7pt>
+File: 0.50_0.30.png Graphic file (type png)
+<use 0.50_0.30.png>
+Package pdftex.def Info: 0.50_0.30.png  used on input line 89.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.50_0.40.png, id=56, 2168.1pt x 722.7pt>
+File: 0.50_0.40.png Graphic file (type png)
+<use 0.50_0.40.png>
+Package pdftex.def Info: 0.50_0.40.png  used on input line 90.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.50_0.50.png, id=57, 2168.1pt x 722.7pt>
+File: 0.50_0.50.png Graphic file (type png)
+<use 0.50_0.50.png>
+Package pdftex.def Info: 0.50_0.50.png  used on input line 91.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.50_0.60.png, id=58, 2168.1pt x 722.7pt>
+File: 0.50_0.60.png Graphic file (type png)
+<use 0.50_0.60.png>
+Package pdftex.def Info: 0.50_0.60.png  used on input line 92.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.50_0.70.png, id=59, 2168.1pt x 722.7pt>
+File: 0.50_0.70.png Graphic file (type png)
+<use 0.50_0.70.png>
+Package pdftex.def Info: 0.50_0.70.png  used on input line 93.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.50_0.80.png, id=60, 2168.1pt x 722.7pt>
+File: 0.50_0.80.png Graphic file (type png)
+<use 0.50_0.80.png>
+Package pdftex.def Info: 0.50_0.80.png  used on input line 94.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.50_0.90.png, id=61, 2168.1pt x 722.7pt>
+File: 0.50_0.90.png Graphic file (type png)
+<use 0.50_0.90.png>
+Package pdftex.def Info: 0.50_0.90.png  used on input line 95.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.60_0.00.png, id=62, 2168.1pt x 722.7pt>
+File: 0.60_0.00.png Graphic file (type png)
+<use 0.60_0.00.png>
+Package pdftex.def Info: 0.60_0.00.png  used on input line 99.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.60_0.10.png, id=63, 2168.1pt x 722.7pt>
+File: 0.60_0.10.png Graphic file (type png)
+<use 0.60_0.10.png>
+Package pdftex.def Info: 0.60_0.10.png  used on input line 100.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.60_0.20.png, id=64, 2168.1pt x 722.7pt>
+File: 0.60_0.20.png Graphic file (type png)
+<use 0.60_0.20.png>
+Package pdftex.def Info: 0.60_0.20.png  used on input line 101.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.60_0.30.png, id=65, 2168.1pt x 722.7pt>
+File: 0.60_0.30.png Graphic file (type png)
+<use 0.60_0.30.png>
+Package pdftex.def Info: 0.60_0.30.png  used on input line 102.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.60_0.40.png, id=66, 2168.1pt x 722.7pt>
+File: 0.60_0.40.png Graphic file (type png)
+<use 0.60_0.40.png>
+Package pdftex.def Info: 0.60_0.40.png  used on input line 103.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.60_0.50.png, id=67, 2168.1pt x 722.7pt>
+File: 0.60_0.50.png Graphic file (type png)
+<use 0.60_0.50.png>
+Package pdftex.def Info: 0.60_0.50.png  used on input line 104.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.60_0.60.png, id=68, 2168.1pt x 722.7pt>
+File: 0.60_0.60.png Graphic file (type png)
+<use 0.60_0.60.png>
+Package pdftex.def Info: 0.60_0.60.png  used on input line 105.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.60_0.70.png, id=69, 2168.1pt x 722.7pt>
+File: 0.60_0.70.png Graphic file (type png)
+<use 0.60_0.70.png>
+Package pdftex.def Info: 0.60_0.70.png  used on input line 106.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.60_0.80.png, id=70, 2168.1pt x 722.7pt>
+File: 0.60_0.80.png Graphic file (type png)
+<use 0.60_0.80.png>
+Package pdftex.def Info: 0.60_0.80.png  used on input line 107.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.60_0.90.png, id=71, 2168.1pt x 722.7pt>
+File: 0.60_0.90.png Graphic file (type png)
+<use 0.60_0.90.png>
+Package pdftex.def Info: 0.60_0.90.png  used on input line 108.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.70_0.00.png, id=72, 2168.1pt x 722.7pt>
+File: 0.70_0.00.png Graphic file (type png)
+<use 0.70_0.00.png>
+Package pdftex.def Info: 0.70_0.00.png  used on input line 112.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.70_0.10.png, id=73, 2168.1pt x 722.7pt>
+File: 0.70_0.10.png Graphic file (type png)
+<use 0.70_0.10.png>
+Package pdftex.def Info: 0.70_0.10.png  used on input line 113.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.70_0.20.png, id=74, 2168.1pt x 722.7pt>
+File: 0.70_0.20.png Graphic file (type png)
+<use 0.70_0.20.png>
+Package pdftex.def Info: 0.70_0.20.png  used on input line 114.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.70_0.30.png, id=75, 2168.1pt x 722.7pt>
+File: 0.70_0.30.png Graphic file (type png)
+<use 0.70_0.30.png>
+Package pdftex.def Info: 0.70_0.30.png  used on input line 115.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.70_0.40.png, id=76, 2168.1pt x 722.7pt>
+File: 0.70_0.40.png Graphic file (type png)
+<use 0.70_0.40.png>
+Package pdftex.def Info: 0.70_0.40.png  used on input line 116.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.70_0.50.png, id=77, 2168.1pt x 722.7pt>
+File: 0.70_0.50.png Graphic file (type png)
+<use 0.70_0.50.png>
+Package pdftex.def Info: 0.70_0.50.png  used on input line 117.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.70_0.60.png, id=78, 2168.1pt x 722.7pt>
+File: 0.70_0.60.png Graphic file (type png)
+<use 0.70_0.60.png>
+Package pdftex.def Info: 0.70_0.60.png  used on input line 118.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.70_0.70.png, id=79, 2168.1pt x 722.7pt>
+File: 0.70_0.70.png Graphic file (type png)
+<use 0.70_0.70.png>
+Package pdftex.def Info: 0.70_0.70.png  used on input line 119.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.70_0.80.png, id=80, 2168.1pt x 722.7pt>
+File: 0.70_0.80.png Graphic file (type png)
+<use 0.70_0.80.png>
+Package pdftex.def Info: 0.70_0.80.png  used on input line 120.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.70_0.90.png, id=81, 2168.1pt x 722.7pt>
+File: 0.70_0.90.png Graphic file (type png)
+<use 0.70_0.90.png>
+Package pdftex.def Info: 0.70_0.90.png  used on input line 121.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.80_0.00.png, id=82, 2168.1pt x 722.7pt>
+File: 0.80_0.00.png Graphic file (type png)
+<use 0.80_0.00.png>
+Package pdftex.def Info: 0.80_0.00.png  used on input line 125.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.80_0.10.png, id=83, 2168.1pt x 722.7pt>
+File: 0.80_0.10.png Graphic file (type png)
+<use 0.80_0.10.png>
+Package pdftex.def Info: 0.80_0.10.png  used on input line 126.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.80_0.20.png, id=84, 2168.1pt x 722.7pt>
+File: 0.80_0.20.png Graphic file (type png)
+<use 0.80_0.20.png>
+Package pdftex.def Info: 0.80_0.20.png  used on input line 127.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.80_0.30.png, id=85, 2168.1pt x 722.7pt>
+File: 0.80_0.30.png Graphic file (type png)
+<use 0.80_0.30.png>
+Package pdftex.def Info: 0.80_0.30.png  used on input line 128.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.80_0.40.png, id=86, 2168.1pt x 722.7pt>
+File: 0.80_0.40.png Graphic file (type png)
+<use 0.80_0.40.png>
+Package pdftex.def Info: 0.80_0.40.png  used on input line 129.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.80_0.50.png, id=87, 2168.1pt x 722.7pt>
+File: 0.80_0.50.png Graphic file (type png)
+<use 0.80_0.50.png>
+Package pdftex.def Info: 0.80_0.50.png  used on input line 130.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.80_0.60.png, id=88, 2168.1pt x 722.7pt>
+File: 0.80_0.60.png Graphic file (type png)
+<use 0.80_0.60.png>
+Package pdftex.def Info: 0.80_0.60.png  used on input line 131.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.80_0.70.png, id=89, 2168.1pt x 722.7pt>
+File: 0.80_0.70.png Graphic file (type png)
+<use 0.80_0.70.png>
+Package pdftex.def Info: 0.80_0.70.png  used on input line 132.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.80_0.80.png, id=90, 2168.1pt x 722.7pt>
+File: 0.80_0.80.png Graphic file (type png)
+<use 0.80_0.80.png>
+Package pdftex.def Info: 0.80_0.80.png  used on input line 133.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.80_0.90.png, id=91, 2168.1pt x 722.7pt>
+File: 0.80_0.90.png Graphic file (type png)
+<use 0.80_0.90.png>
+Package pdftex.def Info: 0.80_0.90.png  used on input line 134.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.90_0.00.png, id=92, 2168.1pt x 722.7pt>
+File: 0.90_0.00.png Graphic file (type png)
+<use 0.90_0.00.png>
+Package pdftex.def Info: 0.90_0.00.png  used on input line 138.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.90_0.10.png, id=93, 2168.1pt x 722.7pt>
+File: 0.90_0.10.png Graphic file (type png)
+<use 0.90_0.10.png>
+Package pdftex.def Info: 0.90_0.10.png  used on input line 139.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.90_0.20.png, id=94, 2168.1pt x 722.7pt>
+File: 0.90_0.20.png Graphic file (type png)
+<use 0.90_0.20.png>
+Package pdftex.def Info: 0.90_0.20.png  used on input line 140.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.90_0.30.png, id=95, 2168.1pt x 722.7pt>
+File: 0.90_0.30.png Graphic file (type png)
+<use 0.90_0.30.png>
+Package pdftex.def Info: 0.90_0.30.png  used on input line 141.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.90_0.40.png, id=96, 2168.1pt x 722.7pt>
+File: 0.90_0.40.png Graphic file (type png)
+<use 0.90_0.40.png>
+Package pdftex.def Info: 0.90_0.40.png  used on input line 142.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.90_0.50.png, id=97, 2168.1pt x 722.7pt>
+File: 0.90_0.50.png Graphic file (type png)
+<use 0.90_0.50.png>
+Package pdftex.def Info: 0.90_0.50.png  used on input line 143.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.90_0.60.png, id=98, 2168.1pt x 722.7pt>
+File: 0.90_0.60.png Graphic file (type png)
+<use 0.90_0.60.png>
+Package pdftex.def Info: 0.90_0.60.png  used on input line 144.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.90_0.70.png, id=99, 2168.1pt x 722.7pt>
+File: 0.90_0.70.png Graphic file (type png)
+<use 0.90_0.70.png>
+Package pdftex.def Info: 0.90_0.70.png  used on input line 145.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.90_0.80.png, id=100, 2168.1pt x 722.7pt>
+File: 0.90_0.80.png Graphic file (type png)
+<use 0.90_0.80.png>
+Package pdftex.def Info: 0.90_0.80.png  used on input line 146.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+<0.90_0.90.png, id=101, 2168.1pt x 722.7pt>
+File: 0.90_0.90.png Graphic file (type png)
+<use 0.90_0.90.png>
+Package pdftex.def Info: 0.90_0.90.png  used on input line 147.
+(pdftex.def)             Requested size: 303.4363pt x 101.14423pt.
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./0.00_0.00.png> <./0.00_0
+.10.png> <./0.00_0.20.png> <./0.00_0.30.png> <./0.00_0.40.png> <./0.00_0.50.png
+> <./0.00_0.60.png> <./0.00_0.70.png> <./0.00_0.80.png> <./0.00_0.90.png> <./0.
+10_0.00.png> <./0.10_0.10.png> <./0.10_0.20.png> <./0.10_0.30.png> <./0.10_0.40
+.png> <./0.10_0.50.png> <./0.10_0.60.png> <./0.10_0.70.png> <./0.10_0.80.png> <
+./0.10_0.90.png> <./0.20_0.00.png> <./0.20_0.10.png> <./0.20_0.20.png> <./0.20_
+0.30.png> <./0.20_0.40.png> <./0.20_0.50.png> <./0.20_0.60.png> <./0.20_0.70.pn
+g> <./0.20_0.80.png> <./0.20_0.90.png> <./0.30_0.00.png> <./0.30_0.10.png> <./0
+.30_0.20.png> <./0.30_0.30.png> <./0.30_0.40.png> <./0.30_0.50.png> <./0.30_0.6
+0.png> <./0.30_0.70.png> <./0.30_0.80.png> <./0.30_0.90.png> <./0.40_0.00.png> 
+<./0.40_0.10.png> <./0.40_0.20.png> <./0.40_0.30.png> <./0.40_0.40.png> <./0.40
+_0.50.png> <./0.40_0.60.png> <./0.40_0.70.png> <./0.40_0.80.png> <./0.40_0.90.p
+ng> <./0.50_0.00.png> <./0.50_0.10.png> <./0.50_0.20.png> <./0.50_0.30.png> <./
+0.50_0.40.png> <./0.50_0.50.png> <./0.50_0.60.png> <./0.50_0.70.png> <./0.50_0.
+80.png> <./0.50_0.90.png> <./0.60_0.00.png> <./0.60_0.10.png> <./0.60_0.20.png>
+ <./0.60_0.30.png> <./0.60_0.40.png> <./0.60_0.50.png> <./0.60_0.60.png> <./0.6
+0_0.70.png> <./0.60_0.80.png> <./0.60_0.90.png> <./0.70_0.00.png> <./0.70_0.10.
+png> <./0.70_0.20.png> <./0.70_0.30.png> <./0.70_0.40.png> <./0.70_0.50.png> <.
+/0.70_0.60.png> <./0.70_0.70.png> <./0.70_0.80.png> <./0.70_0.90.png> <./0.80_0
+.00.png> <./0.80_0.10.png> <./0.80_0.20.png> <./0.80_0.30.png> <./0.80_0.40.png
+> <./0.80_0.50.png> <./0.80_0.60.png> <./0.80_0.70.png> <./0.80_0.80.png> <./0.
+80_0.90.png> <./0.90_0.00.png> <./0.90_0.10.png> <./0.90_0.20.png> <./0.90_0.30
+.png> <./0.90_0.40.png> <./0.90_0.50.png> <./0.90_0.60.png> <./0.90_0.70.png> <
+./0.90_0.80.png> <./0.90_0.90.png>] (./state_space.aux) ) 
+Here is how much of TeX's memory you used:
+ 2307 strings out of 479304
+ 35471 string characters out of 5869780
+ 356409 words of memory out of 5000000
+ 19436 multiletter control sequences out of 15000+600000
+ 403430 words of font info for 27 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 68i,11n,74p,188b,303s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
+Output written on state_space.pdf (1 page, 4861182 bytes).
+PDF statistics:
+ 213 PDF objects out of 1000 (max. 8388607)
+ 8 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 501 words of extra memory for PDF output out of 10000 (max. 10000000)
+

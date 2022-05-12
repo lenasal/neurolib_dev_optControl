@@ -1,0 +1,10 @@
+coverage:
+  precision: 2
+  round: nearest
+  range: "50...90"
+  ignore:
+    - "neurolib/models/**/timeIntegration.py" 
+    - "neurolib/utils/devutils.py"
+    - "neurolib/utils/atlases.py"
+  status:
+    patch: off

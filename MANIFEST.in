@@ -1,0 +1,8 @@
+include requirements.txt
+include neurolib/models/aln/aln-precalc/quantities_cascade.h5
+
+# datasets
+# recursive-include neurolib/data *
+
+recursive-include neurolib/data/datasets/hcp *
+recursive-include neurolib/data/datasets/gw *
