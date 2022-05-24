@@ -280,7 +280,7 @@ def timeIntegration(params, control):
     ext_ie_rate = ap.adjust_shape(params["ext_ie_rate"], rates_exc)
     ext_ii_rate = ap.adjust_shape(params["ext_ii_rate"], rates_exc)
 
-    print("ext xc curretn = ", ext_exc_current)
+    #print("ext xc curretn = ", ext_exc_current)
     
     control_ext = control.copy()
 
@@ -542,8 +542,6 @@ def timeIntegration_njit_elementwise(
             mue = (Jee_max * seem[no,i-1] + Jei_max * seim[no,i-1] + mue_ou[no,i-1] + ext_exc_current[no, i]
                    #+ control_ext[no, 0, i-startind+1]
                    )
-            if ext_exc_current[no, i] != 0:
-                print(i, ext_exc_current[0,:])
             #print(seim[no,i-1])
             mui = (Jie_max * siem[no,i-1] + Jii_max * siim[no,i-1] + mui_ou[no,i-1] + ext_inh_current[no, i]
                    #+ control_ext[no, 1, i-startind+1]

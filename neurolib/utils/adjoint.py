@@ -55,11 +55,11 @@ def adjoint(model, st_, fp, u0, method='generic'):
             if v < fp.shape[1]:
                 adjoint[n,v,t] -= fp[n,v,t]
 
-        for v in variables.diffvar:
-            der = 0.
-            for v1 in variables.algvar:
-                der += adjoint[n,v1,t] * jac_t0[n,v1,v]
-            adjoint[n,v,t] = dt * der
+        #for v in variables.diffvar:
+        #    der = 0.
+        #    for v1 in variables.algvar:
+        #        der += adjoint[n,v1,t] * jac_t0[n,v1,v]
+        #    adjoint[n,v,t] = dt * der
 
         
         for t in range(adjoint.shape[2]-2, -1, -1):
@@ -83,7 +83,7 @@ def adjoint(model, st_, fp, u0, method='generic'):
                 for v1 in variables.diffvar:
                     der += adjoint[n,v1,t+1] * jac_t1[n,v1,v]
                 for v1 in variables.algvar:
-                    der += adjoint[n,v1,t] * jac_t0[n,v1,v]
+                    der += adjoint[n,v1,t+1] * jac_t1[n,v1,v]
                 adjoint[n,v,t] = adjoint[n,v,t+1] + dt * der
             
 
@@ -124,7 +124,7 @@ def grad(adj_, state_, fu, u0, v_control, model, method='generic'):
     for t in range(T):  
         duh_ = duh(state_[:,:,t], model, v_control, u0[:,:,t])
 
-        print(duh_[0,2,0])
+        #print('duh 2,0 ', duh_[0,2,0])
         for n in range(N):
             for vc in range(V_c):
                 grad[n,vc,t] = fu[n,vc,t]
@@ -183,7 +183,13 @@ def bisection(model, dur_, init_state_, u0, d0, target_, w, T, maxcontrol, step0
     state2 = get_fullstate(model, state_vars, N, V, T)
     c2 = cost(model, state2, target_, w, u2)
 
-    while c2 <= c1:
+    #print(u0[0,0,:], c0)
+    #print(u1[0,0,:], c1)
+    #print(u2[0,0,:], c2)
+
+    #print(c0, c1, c2)
+
+    while c2 <= c1 or c1 > c0:
         s *= factor
         
         u1 = u0 + s * d0
@@ -209,7 +215,7 @@ def bisection(model, dur_, init_state_, u0, d0, target_, w, T, maxcontrol, step0
     #print(s, c1, c2)
     return s
 
-def opt_c(model, max_it, init_state_, target_, w, u0, v_control, maxcontrol=10., method='generic', step0=100., factor=0.9): 
+def opt_c(model, max_it, init_state_, target_, w, u0, v_control, maxcontrol=10., method='generic', step0=10., factor=0.9): 
 
     set_vartype(model)
     cost_list = []
@@ -237,13 +243,15 @@ def opt_c(model, max_it, init_state_, target_, w, u0, v_control, maxcontrol=10.,
 
     for i in range(max_it):
         fp_ = fp(state0_targetvars, target_)
+        #print('fp = ', fp_[0,0,:])
         fu_ = fu(w, u0)
         #print(state0.shape)
         adj = adjoint(model, state0, fp_, u0, method)
-        print("adj = ", adj[0,2,:])
+        #print("adj 0 = ", adj[0,0,:])
+        #print("adj = ", adj[0,2,:])
         direction = - grad(adj, state0, fu_, u0, v_control, model, method)
-        print('direction ', direction[0,0,:])
-        print('direction ', direction[0,1,:])
+        #print('direction ', direction[0,0,:])
+        #print('direction ', direction[0,1,:])
         step = bisection(model, dur_, init_state_, u0, direction, target_, w, T, maxcontrol, step0, factor)
         if step == 0.:
             print("iteration ", i)
@@ -257,6 +265,7 @@ def opt_c(model, max_it, init_state_, target_, w, u0, v_control, maxcontrol=10.,
         set_control(model, u0)
         model.run()
         state0 = get_fullstate(model, model.state_vars, N, V_state, T)
+        state0_targetvars = get_fullstate(model, model.state_vars, N, V_target, T)
 
         cost_list.append(cost(model, state0, target_, w, u0))
 

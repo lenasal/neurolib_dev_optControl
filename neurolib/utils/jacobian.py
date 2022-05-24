@@ -74,18 +74,18 @@ def generic_duh(state_, model, v_control, u_=None):
         for vc in v_control[n]:
             u1 = u0.copy()
             i0, i1 = 0, 1
-            #if model.name == 'aln':
-            #    i0, i1 = 1, 2
+            if model.name == 'aln':
+                i0, i1 = 1, 0
             u1[n,vc,i0] += du
             adj.set_init(model, state_, init_vars, state_vars)
             adj.set_control(model, u1)
-            print('set control ', model.params.ext_exc_current)
+            #print('set control ', model.params.ext_exc_current)
             model.run()
             #print("tau_e = ", model.state['tau_exc'])
             x1 = adj.get_fullstate(model, state_vars, N, V, T)
 
-            print(x0[0,2,:])
-            print(x1[0,2,:])
+            #print('mue 0', x0[0,2,:])
+            #print(x1[0,2,:])
 
             for v in adj.variables.controlvar:
 
