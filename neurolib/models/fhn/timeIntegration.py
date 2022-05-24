@@ -2,6 +2,7 @@ import numpy as np
 import numba
 
 from . import loadDefaultParams as dp
+from ...utils import adjust_params as ap
 
 
 def timeIntegration(params):
@@ -84,25 +85,13 @@ def timeIntegration(params):
     x_ou = params["x_ou"]
     y_ou = params["y_ou"]
 
-    x_ext_const = params["x_ext_const"]
-    y_ext_const = params["y_ext_const"]
-
-    #x_ext = params["x_ext"]
-    #y_ext = params["y_ext"]
-
-    if np.shape(params["x_ext"])[1] == 1:
-        x_ext = np.dot( params["x_ext"], np.ones(( 1, startind + len(t) )) )
-    else:
-        x_ext = params["x_ext"]
-    if np.shape(params["y_ext"])[1] == 1:
-        y_ext = np.dot( params["y_ext"], np.ones(( 1, startind + len(t) )) )
-    else:
-        y_ext = params["y_ext"]
-
     # state variable arrays, have length of t + startind
     # they store initial conditions AND simulated data
     xs = np.zeros((N, startind + len(t)))
     ys = np.zeros((N, startind + len(t)))
+
+    x_ext = ap.adjust_shape(params["x_ext"], xs)
+    y_ext = ap.adjust_shape(params["y_ext"], ys)
     
 
     # ------------------------------------------------------------------------
@@ -153,8 +142,6 @@ def timeIntegration(params):
         ys,
         xs_input_d,
         ys_input_d,
-        x_ext_const,
-        y_ext_const,
         x_ext,
         y_ext,
         alpha,
@@ -192,8 +179,6 @@ def timeIntegration_njit_elementwise(
     ys,
     xs_input_d,
     ys_input_d,
-    x_ext_const,
-    y_ext_const,
     x_ext,
     y_ext,
     alpha,
@@ -257,16 +242,13 @@ def timeIntegration_njit_elementwise(
                 - ys[no, i - 1]
                 + xs_input_d[no]  # input from other nodes
                 + x_ou[no]  # ou noise
-                + x_ext_const[no]
                 + x_ext[no,i-1]  # external input
             )
             y_rhs = (
                 (xs[no, i - 1] - delta - epsilon * ys[no, i - 1]) / tau
                 + ys_input_d[no]  # input from other nodes
                 + y_ou[no]  # ou noise
-                + y_ext_const[no]
                 + y_ext[no,i-1]  # external input
-    
             )
 
             # Euler integration

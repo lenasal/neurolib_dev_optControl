@@ -76,13 +76,9 @@ def loadDefaultParams(Cmat=None, Dmat=None, seed=None):
     params.x_ou = np.zeros((params.N,))
     params.y_ou = np.zeros((params.N,))
 
-    # constant external inputs
-    params.x_ext_const = np.zeros((params.N,))
-    params.y_ext_const = np.zeros((params.N,))
-
     # time-dependent external inputs
-    params.x_ext = np.zeros((params.N,1))
-    params.y_ext = np.zeros((params.N,1))
+    params.x_ext = 0.
+    params.y_ext = 0.
 
     return params
 

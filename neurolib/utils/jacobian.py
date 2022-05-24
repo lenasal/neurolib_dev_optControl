@@ -14,43 +14,39 @@ def generic_jacobian(state_, model, u_=None):
     init_vars = model.init_vars
     state_vars = model.state_vars
 
+    #print(state_.shape)
+
     model.params.duration = 3. * dt
-    set_init(model, state_, init_vars, state_vars)
+    adj.set_init(model, state_, init_vars, state_vars)
     model.run()
     T = np.around(model.params.duration/dt + 1,1).astype(int)
-    x0 = get_fullstate(model, state_vars, N, V, T)
+    x0 = adj.get_fullstate(model, state_vars, N, V, T)
+
 
     for n in range(N):
         for v in range(V):
+
             state1 = state_.copy()
             state1[n,v] += dx
-            set_init(model, state1, init_vars, state_vars)
+            adj.set_init(model, state1, init_vars, state_vars)
             model.run()
-            x1 = get_fullstate(model, state_vars, N, V, T)
+            x1 = adj.get_fullstate(model, state_vars, N, V, T)
 
             #print(x0)
             #print(x1)
 
             for v_ in range(V):
 
-                dx0 = ( x0[n,v_,1] - x0[n,v_,0] ) / dt
-                dx1 = ( x1[n,v_,1] - x1[n,v_,0] ) / dt
+                if v_ in adj.variables.algvar:
+                    if v in adj.variables.algvar:
+                        jac[n,v_,v] = ( x1[n,v_,0] - x0[n,v_,0] ) / dx
+                    elif v in adj.variables.diffvar:
+                        jac[n,v_,v] = ( x1[n,v_,1] - x0[n,v_,1] ) / dx
+                elif v_ in adj.variables.diffvar:
+                    dx0 = ( x0[n,v_,1] - x0[n,v_,0] ) / dt
+                    dx1 = ( x1[n,v_,1] - x1[n,v_,0] ) / dt
 
-                jac[n,v_,v] = (dx1 - dx0) / dx
-
-    """
-    A_ = np.zeros((3,3))
-    x_ = np.zeros(( 3 ))
-
-    for t in range(3):
-        A_[t,0] = x0[0,0,t]
-        A_[t,1] = x0[0,1,t]
-        A_[t,2] = 1.
-        x_[t] = ( x0[0,0,t+1] - x0[0,0,t] ) / dt
-
-    sol = np.linalg.solve(A_, x_)
-    #print(sol)
-    """
+                    jac[n,v_,v] = ( dx1 - dx0 ) / dx
 
     return jac
 
@@ -61,32 +57,40 @@ def generic_duh(state_, model, v_control, u_=None):
     duh = np.zeros(( N,V,V_c ))
     dt = model.params.dt
 
-    du = 0.01
+    du = 0.001
 
     init_vars = model.init_vars
     state_vars = model.state_vars
 
     model.params.duration = 3. * dt
     u0 = np.zeros(( N,V_c,4 ))
-    set_init(model, state_, init_vars, state_vars)
+    adj.set_init(model, state_, init_vars, state_vars)
     adj.set_control(model, u0)
     model.run()
     T = np.around(model.params.duration/dt + 1,1).astype(int)
-    x0 = get_fullstate(model, state_vars, N, V, T)
+    x0 = adj.get_fullstate(model, state_vars, N, V, T)
 
     for n in range(N):
         for vc in v_control[n]:
             u1 = u0.copy()
-            u1[n,vc,0] += du
-            set_init(model, state_, init_vars, state_vars)
+            i0, i1 = 0, 1
+            #if model.name == 'aln':
+            #    i0, i1 = 1, 2
+            u1[n,vc,i0] += du
+            adj.set_init(model, state_, init_vars, state_vars)
             adj.set_control(model, u1)
+            print('set control ', model.params.ext_exc_current)
             model.run()
-            x1 = get_fullstate(model, state_vars, N, V, T)
+            #print("tau_e = ", model.state['tau_exc'])
+            x1 = adj.get_fullstate(model, state_vars, N, V, T)
 
-            for v in range(V):
+            print(x0[0,2,:])
+            print(x1[0,2,:])
 
-                dx0 = ( x0[n,v,1] - x0[n,v,0] ) / dt
-                dx1 = ( x1[n,v,1] - x1[n,v,0] ) / dt
+            for v in adj.variables.controlvar:
+
+                dx0 = ( x0[n,v,i1] - x0[n,v,i0] ) / dt
+                dx1 = ( x1[n,v,i1] - x1[n,v,i0] ) / dt
 
                 duh[n,v,vc] = (dx1 - dx0) / du
 
@@ -129,8 +133,9 @@ def jacobian_wc(state_, model, u_):
 
         exc_input = 0.
 
-        expE = np.exp( - model.params.a_exc * ( ( model.params.c_excexc * state_[n,0] - model.params.c_inhexc * state_[n,1] + exc_input + model.params.exc_ext_const[n] + u_[n,0] ) - model.params.mu_exc  ))
-        expI = np.exp( - model.params.a_inh * ( ( model.params.c_excinh * state_[n,0] - model.params.c_inhinh * state_[n,1] + model.params.inh_ext_const[n] + u_[n,1] ) - model.params.mu_inh ) )
+        expE = np.exp( - model.params.a_exc * ( ( model.params.c_excexc * state_[n,0] - model.params.c_inhexc * state_[n,1] + u_[n,0] ) - model.params.mu_exc  ))
+        expI = np.exp( - model.params.a_inh * ( ( model.params.c_excinh * state_[n,0] - model.params.c_inhinh * state_[n,1] + u_[n,1] ) - model.params.mu_inh ) )
+                
         jac[n,0,0] = ( - 1. - 1. / ( 1. + expE ) - ( 1. - state_[n,0] ) * ( - model.params.a_exc * model.params.c_excexc * expE) / ( 1. + expE )**2 ) / model.params.tau_exc
         jac[n,0,1] = ( ( state_[n,0] - 1. ) * ( model.params.a_exc * model.params.c_inhexc * expE) / ( 1. + expE )**2 ) / model.params.tau_exc
         jac[n,1,0] = ( ( state_[n,1] - 1. ) * ( - model.params.a_inh * model.params.c_excinh * expI) / ( 1. + expI )**2 ) / model.params.tau_inh
@@ -184,24 +189,3 @@ def duh_wc(state_, model, v_control, u_):
             duh[n,1,1] = ( ( state_[n,1] - 1. ) * ( - model.params.a_inh * expI) / ( 1. + expI )**2 ) / model.params.tau_inh
 
     return duh
-
-def set_init(model, x0_, init_vars_, state_vars_):
-    N = x0_.shape[0]
-    for iv in range(len(init_vars_)):
-        if 'ou' in init_vars_[iv]:
-            continue
-        for sv in range(len(state_vars_)):
-            if state_vars_[sv] in init_vars_[iv]:
-                init_array = np.zeros(( N,1 ))
-                init_array[:,0] = x0_[:,sv]
-                model.params[init_vars_[iv]] = init_array
-
-def get_fullstate(model, state_vars_, N, V, T):
-    x_ = np.zeros(( N,V,T ))
-    for sv in range(V):
-        if 'ou' in state_vars_[sv]:
-            continue
-        for n in range(N):
-            x_[n,sv,:] = model[state_vars_[sv]][n,:]
-
-    return x_
