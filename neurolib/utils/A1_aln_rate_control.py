@@ -1163,7 +1163,7 @@ def D_u_h(V, n_control_vars, state_, control_, t_, state_pre_,
     
     return duh_
 
-@numba.njit
+#@numba.njit
 def jacobian(V, state_, control_, T, state_pre_,
               ext_exc_current,
               ext_inh_current,
@@ -1224,26 +1224,26 @@ def jacobian(V, state_, control_, T, state_pre_,
            
     # ee, ei, ie, ii
         if t_-shift_e >= 0:
-            z1ee = factor_ee1 * rd_exc[0,0,t_-shift_e] + factor_eec1 * ( control_[0,2,t_] + ext_ee_rate )
-            z2ee = factor_ee2 * rd_exc[0,0,t_-shift_e] + factor_eec2 * ( control_[0,2,t_] + ext_ee_rate ) 
-            z1ie = factor_ie1 * rd_exc[0,0,t_-shift_e] + factor_iec1 * ( control_[0,4,t_] + ext_ie_rate )
-            z2ie = factor_ie2 * rd_exc[0,0,t_-shift_e] + factor_iec2 * ( control_[0,4,t_] + ext_ie_rate )
+            z1ee = factor_ee1 * rd_exc[0,0,t_-shift_e] + factor_eec1 * ( control_[0,2,t_] + ext_ee_rate[0,t_] )
+            z2ee = factor_ee2 * rd_exc[0,0,t_-shift_e] + factor_eec2 * ( control_[0,2,t_] + ext_ee_rate[0,t_] ) 
+            z1ie = factor_ie1 * rd_exc[0,0,t_-shift_e] + factor_iec1 * ( control_[0,4,t_] + ext_ie_rate[0,t_] )
+            z2ie = factor_ie2 * rd_exc[0,0,t_-shift_e] + factor_iec2 * ( control_[0,4,t_] + ext_ie_rate[0,t_] )
         else:
-            z1ee = factor_ee1 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_eec1 * ( control_[0,2,t_] + ext_ee_rate )
-            z2ee = factor_ee2 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_eec2 * ( control_[0,2,t_] + ext_ee_rate )
-            z1ie = factor_ie1 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_iec1 * ( control_[0,4,t_] + ext_ie_rate )
-            z2ie = factor_ie2 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_iec2 * ( control_[0,4,t_] + ext_ie_rate )
+            z1ee = factor_ee1 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_eec1 * ( control_[0,2,t_] + ext_ee_rate[0,t_] )
+            z2ee = factor_ee2 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_eec2 * ( control_[0,2,t_] + ext_ee_rate[0,t_] )
+            z1ie = factor_ie1 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_iec1 * ( control_[0,4,t_] + ext_ie_rate[0,t_] )
+            z2ie = factor_ie2 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_iec2 * ( control_[0,4,t_] + ext_ie_rate[0,t_] )
             
         if t_-shift_i >= 0:
-            z1ei = factor_ei1 * rd_inh[0,t_-shift_i] + factor_eic1 * ( control_[0,3,t_] + ext_ei_rate )
-            z2ei = factor_ei2 * rd_inh[0,t_-shift_i] + factor_eic2 * ( control_[0,3,t_] + ext_ei_rate )       
-            z1ii = factor_ii1 * rd_inh[0,t_-shift_i] + factor_iic1 * ( control_[0,5,t_] + ext_ii_rate )
-            z2ii = factor_ii2 * rd_inh[0,t_-shift_i] + factor_iic2 * ( control_[0,5,t_] + ext_ii_rate )
+            z1ei = factor_ei1 * rd_inh[0,t_-shift_i] + factor_eic1 * ( control_[0,3,t_] + ext_ei_rate[0,t_] )
+            z2ei = factor_ei2 * rd_inh[0,t_-shift_i] + factor_eic2 * ( control_[0,3,t_] + ext_ei_rate[0,t_] )       
+            z1ii = factor_ii1 * rd_inh[0,t_-shift_i] + factor_iic1 * ( control_[0,5,t_] + ext_ii_rate[0,t_] )
+            z2ii = factor_ii2 * rd_inh[0,t_-shift_i] + factor_iic2 * ( control_[0,5,t_] + ext_ii_rate[0,t_] )
         else:
-            z1ei = factor_ei1 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_eic1 * ( control_[0,3,t_] + ext_ei_rate )
-            z2ei = factor_ei2 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_eic2 * ( control_[0,3,t_] + ext_ei_rate )         
-            z1ii = factor_ii1 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_iic1 * ( control_[0,5,t_] + ext_ii_rate )
-            z2ii = factor_ii2 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_iic2 * ( control_[0,5,t_] + ext_ii_rate )
+            z1ei = factor_ei1 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_eic1 * ( control_[0,3,t_] + ext_ei_rate[0,t_] )
+            z2ei = factor_ei2 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_eic2 * ( control_[0,3,t_] + ext_ei_rate[0,t_] )         
+            z1ii = factor_ii1 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_iic1 * ( control_[0,5,t_] + ext_ii_rate[0,t_] )
+            z2ii = factor_ii2 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_iic2 * ( control_[0,5,t_] + ext_ii_rate[0,t_] )
          
         """
         z1ee = max(z1ee,0.)
@@ -1272,20 +1272,20 @@ def jacobian(V, state_, control_, T, state_pre_,
         jacobian_[2,5,t_] = - Jee_max / state_[0,18,t_]
         jacobian_[2,6,t_] = - Jei_max / state_[0,18,t_]
         if t_ < T - 1:
-            jacobian_[2,18,t_] = ( Jee_max * state_[0,5,t_] + Jei_max * state_[0,6,t_] + control_[0,0,t_+1] + ext_exc_current
+            jacobian_[2,18,t_] = ( Jee_max * state_[0,5,t_] + Jei_max * state_[0,6,t_] + control_[0,0,t_+1] + ext_exc_current[0,t_+1]
                            + state_[0,13,t_] - state_[0,2,t_] ) / state_[0,18,t_]**2
         else:
-            jacobian_[2,18,t_] = ( Jee_max * state_[0,5,t_] + Jei_max * state_[0,6,t_] + ext_exc_current
+            jacobian_[2,18,t_] = ( Jee_max * state_[0,5,t_] + Jei_max * state_[0,6,t_]
                            + state_[0,13,t_] - state_[0,2,t_] ) / state_[0,18,t_]**2
         
         jacobian_[3,3,t_] = 1. / state_[0,19,t_]
         jacobian_[3,7,t_] = - Jie_max / state_[0,19,t_]
         jacobian_[3,8,t_] = - Jii_max / state_[0,19,t_]
         if t_ < T - 1:
-            jacobian_[3,19,t_] = ( Jie_max * state_[0,7,t_] + Jii_max * state_[0,8,t_] + control_[0,1,t_+1] + ext_inh_current
+            jacobian_[3,19,t_] = ( Jie_max * state_[0,7,t_] + Jii_max * state_[0,8,t_] + control_[0,1,t_+1] + ext_inh_current[0,t_+1]
                            + state_[0,14,t_] - state_[0,3,t_] ) / state_[0,19,t_]**2
         else:
-            jacobian_[3,19,t_] = ( Jie_max * state_[0,7,t_] + Jii_max * state_[0,8,t_] + ext_inh_current
+            jacobian_[3,19,t_] = ( Jie_max * state_[0,7,t_] + Jii_max * state_[0,8,t_]
                            + state_[0,14,t_] - state_[0,3,t_] ) / state_[0,19,t_]**2
         
         jacobian_[4,0,t_] = - b * 1e-3

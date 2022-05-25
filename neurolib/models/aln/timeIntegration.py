@@ -3,6 +3,7 @@ import numba
 import logging
 
 from . import loadDefaultParams as dp
+from ...utils import adjust_params as ap
 
 
 def timeIntegration(params, control):
@@ -272,12 +273,14 @@ def timeIntegration(params, control):
     noise_inh = np.zeros((N,))
 
     # tile external inputs to appropriate shape
-    ext_exc_current = adjust_shape(params["ext_exc_current"], rates_exc)
-    ext_inh_current = adjust_shape(params["ext_inh_current"], rates_exc)
-    ext_ee_rate = adjust_shape(params["ext_ee_rate"], rates_exc)
-    ext_ei_rate = adjust_shape(params["ext_ei_rate"], rates_exc)
-    ext_ie_rate = adjust_shape(params["ext_ie_rate"], rates_exc)
-    ext_ii_rate = adjust_shape(params["ext_ii_rate"], rates_exc)
+    ext_exc_current = ap.adjust_shape(params["ext_exc_current"], rates_exc)
+    ext_inh_current = ap.adjust_shape(params["ext_inh_current"], rates_exc)
+    ext_ee_rate = ap.adjust_shape(params["ext_ee_rate"], rates_exc)
+    ext_ei_rate = ap.adjust_shape(params["ext_ei_rate"], rates_exc)
+    ext_ie_rate = ap.adjust_shape(params["ext_ie_rate"], rates_exc)
+    ext_ii_rate = ap.adjust_shape(params["ext_ii_rate"], rates_exc)
+
+    print("ext xc curretn = ", ext_exc_current)
     
     control_ext = control.copy()
 
@@ -537,11 +540,13 @@ def timeIntegration_njit_elementwise(
 
             # subtract startind from control, as initial conditions are not set.
             mue = (Jee_max * seem[no,i-1] + Jei_max * seim[no,i-1] + mue_ou[no,i-1] + ext_exc_current[no, i]
-                   + control_ext[no, 0, i-startind+1]
+                   #+ control_ext[no, 0, i-startind+1]
                    )
+            if ext_exc_current[no, i] != 0:
+                print(i, ext_exc_current[0,:])
             #print(seim[no,i-1])
             mui = (Jie_max * siem[no,i-1] + Jii_max * siim[no,i-1] + mui_ou[no,i-1] + ext_inh_current[no, i]
-                   + control_ext[no, 1, i-startind+1]
+                   #+ control_ext[no, 1, i-startind+1]
                    )
 
             # compute row sum of Cmat*rd_exc and Cmat**2*rd_exc
@@ -667,6 +672,8 @@ def timeIntegration_njit_elementwise(
             mufe_rhs = (mue - mufe[no,i-1] ) / tau_exc[no,i-1]
             mufi_rhs = (mui - mufi[no,i-1] ) / tau_inh[no,i-1]
 
+            #print(i, mufe_rhs, mufi_rhs)
+
             # rate has to be kHz
             IA_rhs = (a * (Vmean_exc[no,i] - EA) - IA[no, i - 1] + tauA * b * rates_exc[no, i] * 1e-3) / tauA
             
@@ -694,6 +701,8 @@ def timeIntegration_njit_elementwise(
             seiv_rhs = ((1 - seim[no,i-1]) ** 2 * z2ei + (z2ei - 2 * tau_si * (z1ei + 1)) * seiv[no,i-1]) / tau_si ** 2
             siev_rhs = ((1 - siem[no,i-1]) ** 2 * z2ie + (z2ie - 2 * tau_se * (z1ie + 1)) * siev[no,i-1]) / tau_se ** 2
             siiv_rhs = ((1 - siim[no,i-1]) ** 2 * z2ii + (z2ii - 2 * tau_si * (z1ii + 1)) * siiv[no,i-1]) / tau_si ** 2
+
+            #print(i, seem_rhs, seim_rhs, siem_rhs, siim_rhs)
 
             #if i>5031:
             #    print(i, z1ei)
@@ -755,6 +764,8 @@ def timeIntegration_njit_elementwise(
             mui_ou[no,i] = (
                 mui_ou[no,i-1] + (mui_ext_mean - mui_ou[no,i-1]) * dt / tau_ou + sigma_ou * sqrt_dt * noise_inh[no]
             )  # mV/ms
+
+            #print(i, mue_ou[no,i-1])
                         
     for n in range(N):
         # if adaptation is turned off, there is no way to compute Vmean_exc[n,:startind], so just take later value.
@@ -889,49 +900,6 @@ def lookup_no_interp(x, dx, xi, y, dy, yi):
         idxY = len(y) - 1
 
     return idxX, idxY
-
-
-def adjust_shape(original, target):
-    """
-    Tiles and then cuts an array (or list or float) such that
-    it has the same shape as target at the end.
-    This is used to make sure that any input parameter like external current has
-    the same shape as the rate array.
-    """
-
-    # make an ext_exc_current ARRAY from a LIST or INT
-    if not hasattr(original, "__len__"):
-        original = [original]
-    original = np.array(original)
-
-    # repeat original in y until larger (or same size) as target
-
-    # tile until N
-
-    # either (x,) shape or (y,x) shape
-    if len(original.shape) == 1:
-        # if original.shape[0] > 1:
-        rep_y = target.shape[0]
-    elif target.shape[0] > original.shape[0]:
-        rep_y = int(target.shape[0] / original.shape[0]) + 1
-    else:
-        rep_y = 1
-
-    # tile once so the array has shape (N,1)
-    original = np.tile(original, (rep_y, 1))
-
-    # tile until t
-
-    if target.shape[1] > original.shape[1]:
-        rep_x = int(target.shape[1] / original.shape[1]) + 1
-    else:
-        rep_x = 1
-    original = np.tile(original, (1, rep_x))
-
-    # cut from end because the beginning can be initial condition
-    original = original[: target.shape[0], -target.shape[1] :]
-
-    return original
 
 
 @numba.njit(locals={"xid1": numba.int64, "yid1": numba.int64, "dxid": numba.float64, "dyid": numba.float64})

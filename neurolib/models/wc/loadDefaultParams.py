@@ -85,8 +85,8 @@ def loadDefaultParams(Cmat=None, Dmat=None, seed=None):
     params.inh_ext_const = np.zeros((params.N,))
 
     # time-dependent external inputs
-    params.exc_ext = np.zeros((params.N,1))
-    params.inh_ext = np.zeros((params.N,1))
+    params.exc_ext = 0.
+    params.inh_ext = 0.
 
     return params
 
