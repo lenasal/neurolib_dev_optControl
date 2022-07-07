@@ -7,6 +7,7 @@ from timeit import default_timer as timer
 from . import costFunctions as cost
 from . import func_optimize as fo
 from ..models import jacobian_aln as jac_aln
+from ..utils import adjust_params as ap
 
 np.set_printoptions(precision=8)
 
@@ -53,6 +54,7 @@ def A1(model, control_, target_state, c_scheme_, u_mat_, u_scheme_, max_iteratio
     n_control_vars = len(model.control_input_vars)
         
     T = int( 1 + np.around(t_sim_ / dt, 1) )
+    N = model.params.N
     
     V = len(state_vars)
     V_target = target_state_.shape[1]
@@ -61,14 +63,13 @@ def A1(model, control_, target_state, c_scheme_, u_mat_, u_scheme_, max_iteratio
     ##############################################
     # PARAMETERS FOR JACOBIAN
     # TODO: time dependent exc current
-    ext_exc_current = model.params.ext_exc_current
-    ext_inh_current = model.params.ext_inh_current
-    
-    # ee, ei, ie, ii
-    ext_ee_rate = model.params.ext_ee_rate
-    ext_ei_rate = model.params.ext_ei_rate
-    ext_ie_rate = model.params.ext_ie_rate
-    ext_ii_rate = model.params.ext_ii_rate
+
+    ext_exc_current = ap.adjust_shape(model.params["ext_exc_current"], np.zeros((N, T)) )
+    ext_inh_current = ap.adjust_shape(model.params["ext_inh_current"], np.zeros((N, T)) )
+    ext_ee_rate = ap.adjust_shape(model.params["ext_ee_rate"], np.zeros((N, T)) )
+    ext_ei_rate = ap.adjust_shape(model.params["ext_ei_rate"], np.zeros((N, T)) )
+    ext_ie_rate = ap.adjust_shape(model.params["ext_ie_rate"], np.zeros((N, T)) )
+    ext_ii_rate = ap.adjust_shape(model.params["ext_ii_rate"], np.zeros((N, T)) )
     
     sigmae_ext = model.params.sigmae_ext
     sigmai_ext = model.params.sigmai_ext
@@ -104,8 +105,6 @@ def A1(model, control_, target_state, c_scheme_, u_mat_, u_scheme_, max_iteratio
     Jii_sq = Jii_max**2
     
     tau_ou = model.params.tau_ou
-    
-    N = model.params.N
     
     ndt_de = np.around(model.params.de / dt).astype(int)
     ndt_di = np.around(model.params.di / dt).astype(int)
@@ -192,11 +191,18 @@ def A1(model, control_, target_state, c_scheme_, u_mat_, u_scheme_, max_iteratio
     ip_, ie_, is_ = cost.getParams()
 
     # set precision penalty to zero for transition time
-    for t_ in range(T):
-        if t_ < transition_time_ * T:
-            for n_ in range(N):
-                for v_ in range(2):
-                        target_state_[n_,v_,t_] = - 1000.
+    if isinstance(transition_time_, float):
+        for t_ in range(T):
+            if t_ < transition_time_ * T:
+                for n_ in range(N):
+                    for v_ in range(2):
+                            target_state_[n_,v_,t_] = - 1000.
+    elif len(transition_time_) == 2:
+        for t_ in range(T):
+            if t_ < transition_time_[0] * T or t_ > transition_time_[1] * T:
+                for n_ in range(N):
+                    for v_ in range(2):
+                            target_state_[n_,v_,t_] = - 1000.
                         
     total_cost_ = np.zeros((max_iteration_+1))
     total_cost_[i] = cost.f_int(N, n_control_vars, T, dt, state0_, target_state_, best_control_,
@@ -264,7 +270,7 @@ def A1(model, control_, target_state, c_scheme_, u_mat_, u_scheme_, max_iteratio
             rd_exc[0,0, ind_time] = state0_[0,0,ind_time] * 1e-3        
             rd_inh[0, ind_time] = state0_[0,1,ind_time] * 1e-3
 
-        #full_cost_grad[0,0,-1000:] = 1e-10
+        #print('csot grad ', full_cost_grad[0,0,::10])
                                                 
         phi0_ = phi(N, V, T, dt, state0_, target_state_, best_control_, full_cost_grad, state_maxDelay, n_maxDelay, state_pre_, 
                     ext_exc_current,
@@ -370,10 +376,13 @@ def A1(model, control_, target_state, c_scheme_, u_mat_, u_scheme_, max_iteratio
                           ndt_di,
                      )
         
-        #print(phi1_[0,3,:])
+        #print(phi0_[0,0,::2])
+        #print(phi0_[0,2,::2])
                                         
         grad1_ = fo.compute_gradient(N, n_control_vars, T, dt, best_control_, grad1_, phi1_, control_variables, ie_, is_)
         dir0_ = fo.set_direction(N, T, n_control_vars, grad0_, grad1_, dir0_, i, CGVar, tolerance_dir)
+
+        #print(dir0_[0,0,::2])
                         
         minCost = []
             
@@ -708,6 +717,8 @@ def phi(N, V, T, dt, state_, target_state_, control_, full_cost_grad, state_maxD
                     ):
     
     phi_ = np.zeros(( N, V, T ))
+
+    #print(phi_.shape)
     
     jac = jacobian(V, state_[:,:,:], control_[:,:,:], T, state_pre_,
                        ext_exc_current,
@@ -798,6 +809,8 @@ def phi(N, V, T, dt, state_, target_state_, control_, full_cost_grad, state_maxD
                                                         jac[11,0,ind_time+ndt_de],
                                                         jac[15,0,ind_time+ndt_de],
                                                         jac[16,0,ind_time+ndt_de] ] ) ) )
+
+        #print(full_cost_grad[0,0,ind_time], phi_[0,0,ind_time])
             
         if ind_time + ndt_di >= T-1:
             phi_[0,1,ind_time] = - ( full_cost_grad[0,1,ind_time] )
@@ -1090,18 +1103,18 @@ def D_u_h(V, n_control_vars, state_, control_, t_, state_pre_,
           ):
     
     if t_-shift_e >= 0:
-        z1ee = factor_ee1 * rd_exc[0,0,t_-shift_e] + factor_eec1 * ( control_[0,2,t_] + ext_ee_rate )
-        z1ie = factor_ie1 * rd_exc[0,0,t_-shift_e] + factor_iec1 * ( control_[0,4,t_] + ext_ie_rate )
+        z1ee = factor_ee1 * rd_exc[0,0,t_-shift_e] + factor_eec1 * ( control_[0,2,t_] + ext_ee_rate[0,t_] )
+        z1ie = factor_ie1 * rd_exc[0,0,t_-shift_e] + factor_iec1 * ( control_[0,4,t_] + ext_ie_rate[0,t_] )
     else:
-        z1ee = factor_ee1 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_eec1 * ( control_[0,2,t_] + ext_ee_rate )
-        z1ie = factor_ie1 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_iec1 * ( control_[0,4,t_] + ext_ie_rate )
+        z1ee = factor_ee1 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_eec1 * ( control_[0,2,t_] + ext_ee_rate[0,t_] )
+        z1ie = factor_ie1 * state_pre_[0,0,t_-shift_e-1] * 1e-3 + factor_iec1 * ( control_[0,4,t_] + ext_ie_rate[0,t_] )
         
     if t_-shift_i >= 0:
-        z1ei = factor_ei1 * rd_inh[0,t_-shift_i] + factor_eic1 * ( control_[0,3,t_] + ext_ei_rate )
-        z1ii = factor_ii1 * rd_inh[0,t_-shift_i] + factor_iic1 * ( control_[0,5,t_] + ext_ii_rate )
+        z1ei = factor_ei1 * rd_inh[0,t_-shift_i] + factor_eic1 * ( control_[0,3,t_] + ext_ei_rate[0,t_] )
+        z1ii = factor_ii1 * rd_inh[0,t_-shift_i] + factor_iic1 * ( control_[0,5,t_] + ext_ii_rate[0,t_] )
     else:
-        z1ei = factor_ei1 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_eic1 * ( control_[0,3,t_] + ext_ei_rate )
-        z1ii = factor_ii1 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_iic1 * ( control_[0,5,t_] + ext_ii_rate )
+        z1ei = factor_ei1 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_eic1 * ( control_[0,3,t_] + ext_ei_rate[0,t_] )
+        z1ii = factor_ii1 * state_pre_[0,1,t_-shift_i-1] * 1e-3 + factor_iic1 * ( control_[0,5,t_] + ext_ii_rate[0,t_] )
 
     #z1ee = max(z1ee,0.)
     #z2ee = max(z2ee,0.)
@@ -1163,7 +1176,7 @@ def D_u_h(V, n_control_vars, state_, control_, t_, state_pre_,
     
     return duh_
 
-#@numba.njit
+@numba.njit
 def jacobian(V, state_, control_, T, state_pre_,
               ext_exc_current,
               ext_inh_current,

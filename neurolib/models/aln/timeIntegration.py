@@ -171,6 +171,7 @@ def timeIntegration(params, control):
     # Initialization
     # Floating point issue in np.arange() workaraound: use integers in np.arange()
     t = np.arange(1, round(duration, 6) / dt + 1) * dt  # Time variable (ms)
+    # t = np.arange(1, np.around(duration/ dt, 20).astype(int) + 1) * dt  # Time variable (ms)
     sqrt_dt = np.sqrt(dt)
 
     ndt_de = np.around(de / dt).astype(int)
@@ -188,22 +189,22 @@ def timeIntegration(params, control):
     
     # state variable arrays, have length of t + startind
     # they store initial conditions AND simulated data
-    rates_exc = np.zeros((N, startind + len(t)))
-    rates_inh = np.zeros((N, startind + len(t)))
+    rates_exc = np.zeros((N, startind + len(t))).astype(np.float64)
+    rates_inh = np.zeros((N, startind + len(t))).astype(np.float64)
     IA = np.zeros((N, startind + len(t)))
     IA_init = np.zeros((N, startind ))
     
-    mufe  = np.zeros((N, startind + len(t)))
-    mufi  = np.zeros((N, startind + len(t)))
+    mufe  = np.zeros((N, startind + len(t))).astype(np.float64)
+    mufi  = np.zeros((N, startind + len(t))).astype(np.float64)
     
-    seem = np.zeros((N, startind + len(t)))
-    seim = np.zeros((N, startind + len(t)))
-    seev = np.zeros((N, startind + len(t)))
-    seiv = np.zeros((N, startind + len(t)))
-    siim = np.zeros((N, startind + len(t)))
-    siem = np.zeros((N, startind + len(t)))
-    siiv = np.zeros((N, startind + len(t)))
-    siev = np.zeros((N, startind + len(t)))
+    seem = np.zeros((N, startind + len(t))).astype(np.float64)
+    seim = np.zeros((N, startind + len(t))).astype(np.float64)
+    seev = np.zeros((N, startind + len(t))).astype(np.float64)
+    seiv = np.zeros((N, startind + len(t))).astype(np.float64)
+    siim = np.zeros((N, startind + len(t))).astype(np.float64)
+    siem = np.zeros((N, startind + len(t))).astype(np.float64)
+    siiv = np.zeros((N, startind + len(t))).astype(np.float64)
+    siev = np.zeros((N, startind + len(t))).astype(np.float64) 
     
     mue_ou = np.zeros((N, startind + len(t)))
     mui_ou = np.zeros((N, startind + len(t)))
@@ -279,8 +280,6 @@ def timeIntegration(params, control):
     ext_ei_rate = ap.adjust_shape(params["ext_ei_rate"], rates_exc)
     ext_ie_rate = ap.adjust_shape(params["ext_ie_rate"], rates_exc)
     ext_ii_rate = ap.adjust_shape(params["ext_ii_rate"], rates_exc)
-
-    print("ext xc curretn = ", ext_exc_current)
     
     control_ext = control.copy()
 
@@ -480,7 +479,6 @@ def timeIntegration_njit_elementwise(
     interpolate_V,
     interpolate_tau,
 ):
-    
     # squared Jee_max
     sq_Jee_max = Jee_max ** 2
     sq_Jei_max = Jei_max ** 2
@@ -540,13 +538,11 @@ def timeIntegration_njit_elementwise(
 
             # subtract startind from control, as initial conditions are not set.
             mue = (Jee_max * seem[no,i-1] + Jei_max * seim[no,i-1] + mue_ou[no,i-1] + ext_exc_current[no, i]
-                   #+ control_ext[no, 0, i-startind+1]
+                   + control_ext[no, 0, i-startind+1]
                    )
-            if ext_exc_current[no, i] != 0:
-                print(i, ext_exc_current[0,:])
             #print(seim[no,i-1])
             mui = (Jie_max * siem[no,i-1] + Jii_max * siim[no,i-1] + mui_ou[no,i-1] + ext_inh_current[no, i]
-                   #+ control_ext[no, 1, i-startind+1]
+                   + control_ext[no, 1, i-startind+1]
                    )
 
             # compute row sum of Cmat*rd_exc and Cmat**2*rd_exc
@@ -731,6 +727,30 @@ def timeIntegration_njit_elementwise(
             seiv[no,i] = seiv[no,i-1] + dt * seiv_rhs
             siev[no,i] = siev[no,i-1] + dt * siev_rhs
             siiv[no,i] = siiv[no,i-1] + dt * siiv_rhs
+
+            if seem[no,i] < 0:
+                seem[no,i] = 0.0
+
+            if siem[no,i] < 0:
+                siem[no,i] = 0.0
+
+            if seim[no,i] < 0:
+                seim[no,i] = 0.0
+
+            if siim[no,i] < 0:
+                siim[no,i] = 0.0
+
+            if seem[no,i] > 1.:
+                seem[no,i] = 1.
+
+            if siem[no,i] > 1.:
+                siem[no,i] = 1.
+
+            if seim[no,i] > 1.:
+                seim[no,i] = 1.
+
+            if siim[no,i] > 1.:
+                siim[no,i] = 1.
 
             # Ensure the variance does not get negative for low activity
             if seev[no,i] < 0:

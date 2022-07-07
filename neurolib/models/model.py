@@ -665,7 +665,7 @@ class Model:
     
     def A1(self, control_, target_state_, c_scheme_, u_mat_, u_scheme_, max_iteration_ = 100, tolerance_ = 1e-5, startStep_ = 10.,
            max_control_ = 20., min_control_ = -20., t_sim_ = 100, t_sim_pre_ = 50, t_sim_post_ = 50, CGVar = None, line_search_ = None,
-           control_variables_ = [0,1], prec_variables_ = [0,1], separate_comp = True, transition_time_ = 0., noise_real = 0, init_params=None, method='M4', numerical=False):
+           control_variables_ = [0,1], prec_variables_ = [0,1], separate_comp = True, transition_time_ = 0., noise_real = 0, init_params=None, method='M4', method_step='S1', numerical=False):
         if self.name == "fhn":
             return opti1_fhn.A1(self, control_, target_state_, c_scheme_, u_mat_, u_scheme_, max_iteration_, tolerance_, startStep_, max_control_, t_sim_, t_sim_pre_, t_sim_post_, CGVar)
         elif self.name == "aln":
@@ -682,15 +682,15 @@ class Model:
                                                     line_search_, control_variables_, prec_variables_, separate_comp, transition_time_)
                         elif method == 'M2':
                             return M2_noise.M2(self, noise_real, init_params, control_, target_state_, c_scheme_, u_mat_, u_scheme_, max_iteration_,
-                                                    tolerance_, startStep_, max_control_, min_control_, t_sim_, t_sim_pre_, t_sim_post_, CGVar,
+                                                    tolerance_, startStep_, max_control_, min_control_, t_sim_, t_sim_pre_, t_sim_post_, method_step, CGVar,
                                                     line_search_, control_variables_, prec_variables_, separate_comp, transition_time_)
                         elif method == 'M3':
                             return M3_noise.M3(self, noise_real, init_params, control_, target_state_, c_scheme_, u_mat_, u_scheme_, max_iteration_,
-                                                    tolerance_, startStep_, max_control_, min_control_, t_sim_, t_sim_pre_, t_sim_post_, CGVar,
+                                                    tolerance_, startStep_, max_control_, min_control_, t_sim_, t_sim_pre_, t_sim_post_, method_step, CGVar,
                                                     line_search_, control_variables_, prec_variables_, separate_comp, transition_time_)
                         elif method == 'M4':
                             return M4_noise.M4(self, noise_real, init_params, control_, target_state_, c_scheme_, u_mat_, u_scheme_, max_iteration_,
-                                                    tolerance_, startStep_, max_control_, min_control_, t_sim_, t_sim_pre_, t_sim_post_, CGVar,
+                                                    tolerance_, startStep_, max_control_, min_control_, t_sim_, t_sim_pre_, t_sim_post_, method_step, CGVar,
                                                     line_search_, control_variables_, prec_variables_, separate_comp, transition_time_)
                 else:
                     return A1_network.A1(self, control_, target_state_, c_scheme_, u_mat_, u_scheme_, max_iteration_,

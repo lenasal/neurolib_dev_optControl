@@ -6,7 +6,7 @@ from numba.typed import List
 from ..utils.collections import dotdict
 
 costparams = dotdict({})
-costparamsdefault = np.array([1., 1., 1.])
+costparamsdefault = np.array([1., 1., 1., 1.])
 tolerance = 1e-16
 
 #@numba.njit
@@ -22,8 +22,11 @@ def getParams():
         setDefaultParams()
     return costparams.I_p, costparams.I_e, costparams.I_s
 
-def setParams(I_p, I_e, I_s):
-    print("set cost params: ", I_p, I_e, I_s)
+def getParam_r():
+    return costparams.I_ra
+
+def setParams(I_p, I_e, I_s, I_ra = 0.):
+    print("set cost params: ", I_p, I_e, I_s, I_ra)
     if (I_p < 0):
         logging.error("Cost parameter I_p smaller 0 not allowed, use default instead")
         costparams.I_p = costparamsdefault[0]
@@ -39,6 +42,11 @@ def setParams(I_p, I_e, I_s):
         costparams.I_s = costparamsdefault[2]
     else:
         costparams.I_s = I_s
+    if (I_ra < 0):
+        logging.error("Cost parameter I_ra smaller 0 not allowed, use default instead")
+        costparams.I_ra = costparamsdefault[3]
+    else:
+        costparams.I_ra = I_ra
 
 def setDefaultParams():
     print("set default params")
@@ -46,6 +54,8 @@ def setDefaultParams():
     costparams.I_p = costparamsdefault[0]
     costparams.I_e = costparamsdefault[1]
     costparams.I_s = costparamsdefault[2]
+
+    costparams.I_ra = costparamsdefault[3]
 
 ###########################################################
 # cost functions for precision
@@ -284,6 +294,74 @@ def numba_cost_sparsity_node(N, V, T, i_s, dt, control_):
             int_[ind_node, ind_var] += i_s * np.sqrt(cost)
     return int_
 
+###########################################################
+# cost functions for reproducibility auto-correlation
+########################################################### 
+def cost_ra_gradient_i(N, V, T, dt, i_ra, control_array, i):
+    cost = numba_cost_ra_gradient(N, V, T, dt, i_ra, control_array, i)
+    return cost
+
+@numba.njit
+def numba_cost_ra_gradient(N_noise, N, V, T, dt, i_ra, control_array, i):
+    mean_control_ = numba_mean_control(N_noise, N, V, T, control_array)
+    sigma_sq_control_ = numba_sigma_sq_control(N_noise, N, V, T, control_array, mean_control_)
+    grad = np.zeros(( mean_control_.shape ))
+    for ind_node in range(N):
+            for ind_var in range(V):
+                for ind_time in range(0,T):
+                    grad[ind_node, ind_var, ind_time] += i_ra * (control_array[i,ind_node, ind_var, ind_time - mean_control_[ind_node, ind_var, ind_time]]) / sigma_sq_control_[ind_node, ind_var, ind_time]
+    return grad
+
+def cost_ra_int(N, V, T, dt, i_ra, control_array):
+    cost = numba_cost_ra_int(N, V, T, dt, i_ra, control_array)
+    return cost
+
+@numba.njit
+def numba_cost_ra_int(N_noise, N, V, T, dt, i_ra, control_array):
+    mean_control_ = numba_mean_control(N_noise, N, V, T, control_array)
+    sigma_sq_control_ = numba_sigma_sq_control(N_noise, N, V, T, control_array, mean_control_)
+    cost = 0.
+    for n in N_noise:
+        cost += numba_cost_ra_i_int(N, V, T, dt, i_ra, control_array[n,:,:,:], mean_control_, sigma_sq_control_)
+    return cost
+
+
+@numba.njit
+def numba_cost_ra_i_int(N, V, T, dt, i_ra, control_, mean_control_, sigma_sq_control_):
+    cost = 0.
+
+    for ind_node in range(N):
+        for ind_var in range(V):
+            for ind_time in range(0,T):
+                cost += (control_[ind_node, ind_var, ind_time - mean_control_[ind_node, ind_var, ind_time]])**2 * dt / sigma_sq_control_[ind_node, ind_var, ind_time]
+    cost += i_ra
+    return cost
+
+@numba.njit
+def numba_mean_control(N_noise, N, V, T, control_array):
+    mean_ = np.zeros((control_array[0].shape))
+    for ind_node in range(N):
+        for ind_var in range(V):
+            for ind_time in range(0,T):
+                for n in N_noise:
+                    mean_[ind_node, ind_var, ind_time] += control_array[n,ind_node, ind_var, ind_time]
+
+                mean_[ind_node, ind_var, ind_time] /= N
+
+    return mean_
+
+@numba.njit
+def numba_sigma_sq_control(N_noise, N, V, T, control_array, mean_control_):
+    sigma_sq_ = np.zeros((control_array[0].shape))
+    for ind_node in range(N):
+        for ind_var in range(V):
+            for ind_time in range(0,T):
+                for n in N_noise:
+                    sigma_sq_[ind_node, ind_var, ind_time] += ( control_array[n,ind_node, ind_var, ind_time] - mean_control_[ind_node, ind_var, ind_time] )**2
+
+                sigma_sq_[ind_node, ind_var, ind_time] /= N
+
+    return sigma_sq_
 
 # integrated cost
 #@numba.njit

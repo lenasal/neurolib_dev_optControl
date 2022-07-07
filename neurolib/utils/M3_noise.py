@@ -18,10 +18,13 @@ VALID_VAR = {None, "HS", "FR", "PR", "CD", "LS", "DY", "WYL", "HZ"}
 VALID_LS = {None, "AG"}
 
 def M3(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_, u_scheme_, max_iteration_, tolerance_, startStep_,
-       cntrl_max_, cntrl_min_, t_sim_, t_sim_pre_, t_sim_post_,
+       cntrl_max_, cntrl_min_, t_sim_, t_sim_pre_, t_sim_post_, method_step,
        CGVar = None, line_search_ = None, control_variables_ = [0,1], prec_variables_ = [0,1], separate_comp = True, transition_time_ = 0.):
 
-    print("start")
+    if method_step == 'S1':
+        noise_in_step_comp_=False
+    elif method_step == 'S2':
+        noise_in_step_comp_=True
         
     dt = model.params['dt']
     max_iteration_ = int(max_iteration_)
@@ -277,7 +280,7 @@ def M3(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
         
             for ind_time in range(T):
                 #f_p_grad_t_ = cost.cost_precision_gradient_t2(N, V_target, T, ind_time, state0_[:,:2,ind_time], target_state_[:,:,ind_time], ip_)
-                f_p_grad_t_ = cost.cost_precision_gradient_t(N, V_target, state0_[noise_,:,:2,ind_time], target_state_[:,:,ind_time], ip_, transition_time_)
+                f_p_grad_t_ = cost.cost_precision_gradient_t(N, V_target, state0_[noise_,:,:2,ind_time], target_state_[:,:,ind_time], ip_)
 
                 for v in prec_variables:
                     full_cost_grad[0,v,ind_time] = f_p_grad_t_[0,v] 

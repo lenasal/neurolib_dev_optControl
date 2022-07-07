@@ -18,8 +18,13 @@ VALID_VAR = {None, "HS", "FR", "PR", "CD", "LS", "DY", "WYL", "HZ"}
 VALID_LS = {None, "AG"}
 
 def M4(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_, u_scheme_, max_iteration_, tolerance_, startStep_,
-       cntrl_max_, cntrl_min_, t_sim_, t_sim_pre_, t_sim_post_,
+       cntrl_max_, cntrl_min_, t_sim_, t_sim_pre_, t_sim_post_, method_step,
        CGVar = None, line_search_ = None, control_variables_ = [0,1], prec_variables_ = [0,1], separate_comp = True, transition_time_ = 0.):
+
+    if method_step == 'S1':
+        noise_in_step_comp_=False
+    elif method_step == 'S2':
+        noise_in_step_comp_=True
         
     dt = model.params['dt']
     max_iteration_ = int(max_iteration_)
@@ -194,6 +199,7 @@ def M4(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
     state0_ = np.zeros(( noise_real, N, V, T ))
     for noise_ in range(noise_real):
         fo.set_init(model, init_vars_sim[noise_], init_vars, state_vars, startind_)
+        #print(control_.shape)
         state0_[noise_,:,:,:] = fo.updateFullState(model, control_, state_vars)
     
     state1_ = np.zeros(( noise_real, N, V, T ))
@@ -227,6 +233,7 @@ def M4(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
     runtime_ = np.zeros(( int(max_iteration_+1) ))
     runtime_start_ = timer()
     
+    #print(total_cost_)
     print("RUN ", i, ", total integrated cost = ", np.mean(total_cost_[:,i]) )
     
     if CGVar not in VALID_VAR:
@@ -268,13 +275,15 @@ def M4(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
         grad0_ = grad1_.copy()
         grad1_ = np.zeros(( N, n_control_vars, T ))
 
+        state_mean_ = np.zeros(( N, V, T ))
+
         for noise_ in range(noise_real):
             state_mean_ += state0_[noise_,:,:,:]
 
         state_mean_ /= noise_real
                 
         for ind_time in range(T):
-            f_p_grad_t_ = cost.cost_precision_gradient_t(N, V_target, state_mean_[:,:2,ind_time], target_state_[:,:,ind_time], ip_, transition_time_)
+            f_p_grad_t_ = cost.cost_precision_gradient_t(N, V_target, state_mean_[:,:2,ind_time], target_state_[:,:,ind_time], ip_)
 
             for v in prec_variables:
                 full_cost_grad[0,v,ind_time] = f_p_grad_t_[0,v] 
@@ -405,7 +414,7 @@ def M4(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
 
         step_, dir0_, cost_ = fo.get_step_noise(line_search_func, model, N, n_control_vars, T, dt, noise_real, state0_, target_state_,
                     best_control_, dir0_, ip_, ie_, is_, startstep_exc_, startstep_inh_, start_step_noise_, cntrl_max_,
-                    cntrl_min_, grad1_, total_cost_[:,i-1], init_vars_sim, startind_, prec_vars=prec_variables, control_vars=control_variables, separate_comp=True, noise_in_step_comp = False)
+                    cntrl_min_, grad1_, total_cost_[:,i-1], init_vars_sim, startind_, prec_vars=prec_variables, control_vars=control_variables, separate_comp=True, noise_in_step_comp = noise_in_step_comp_)
         
         #print("std dev of cost ", np.std(cost_), np.std(cost_)/np.mean(cost_))
         total_cost_[:,i] = cost_
@@ -454,6 +463,8 @@ def M4(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
             break
         
         u_opt0_ = best_control_.copy()   
+        state_mean_ = np.zeros(( N, V, T ))
+
         for noise_ in range(noise_real):
             fo.set_init(model, init_vars_sim[noise_], init_vars, state_vars, startind_)
             state1_[noise_,:,:,:] = fo.updateFullState(model, best_control_, state_vars)

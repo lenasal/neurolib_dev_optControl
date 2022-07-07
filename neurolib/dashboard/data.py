@@ -7,8 +7,8 @@ from pathlib import Path
 
 from . import layout as layout
 from . import functions as functions
-from neurolib.utils import plotFunctions as plotFunc
-from neurolib.utils import costFunctions as cost
+from neurolib_dev_optControl.neurolib.utils import plotFunctions as plotFunc
+from neurolib_dev_optControl.neurolib.utils import costFunctions as cost
 
 background_color = layout.getcolors()[0]
 cmap = layout.getcolormap()

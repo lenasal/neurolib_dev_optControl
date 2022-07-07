@@ -200,7 +200,8 @@ def step_size(model, N, V, T, dt, state_, target_, control_, dir_, ip_, ie_, is_
               bisec_factor_ = 2., max_control_ = [20., 20., 0.2, 0.2], min_control_ = [-20., -20., 0., 0.],
               tolerance_ = 1e-32, substep_ = 0.1, variables_ = [0,1], alg = "A1", control_parameter = 0.2, grad_ = None, noise_real=0, init_vars=None, startind_=0):
 
-    step_lim = 1e-30
+    step_lim = 1e-20
+    step_lim_up = 1e10
     
     if noise_real == 0:
         cost0_int_ = cost.f_int(N, V, T, dt, state_, target_, control_, ip_, ie_, is_, v_ = variables_)
@@ -299,7 +300,7 @@ def step_size(model, N, V, T, dt, state_, target_, control_, dir_, ip_, ie_, is_
                 result = [step_min_, cost_min_int_, start_step_]
                 result_n = [step_min_, cost_list, start_step_]
                             
-            if noise_real > 1:
+            if noise_real > 0:
                 return result_n
             else:
                 return result
@@ -309,10 +310,10 @@ def step_size(model, N, V, T, dt, state_, target_, control_, dir_, ip_, ie_, is_
                 print(" max iteration reached, step size = ", step_)
             return step_min_, cost_min_int_, start_step_
         
-        if step_ > step_lim:
+        if step_ > step_lim and step_ < step_lim_up:
             step_ /= bisec_factor_
         else:
-            #print("step size too small")
+            print("step size too small or too large")
             return 0., cost0_int_, start_step_
         
 def scan(model_, N, V, T, dt_, substep_, control_, step_min_, dir_, target_, cost_min_int_, max_control_,
@@ -385,15 +386,18 @@ def step_noise_1(line_search_func, model, noise_real, N, n_control_vars, T, dt, 
         limit_multiple = 3.
 
         while n_ < noise_real:
+            
+            #print("Noise step ", n_)
                 
             s_[n_], tc_[n_], ss_[n_] = line_search_func(model, N, n_control_vars, T, dt, state0_[n_][:,:2,:], target_state_,
                                 best_control_, d_, ip_, ie_, is_, start_step_ = ss_[n_], max_it_ = 500,
                                 max_control_ = cntrl_max_, min_control_ = cntrl_min_, variables_ = prec_vars, grad_ = grad1_, noise_real=0, init_vars=init_vars_[n_], startind_=startind_)
 
+            #print(cost_init, tc_[n_])
             if tc_[n_] <= limit_multiple * np.mean(cost_init):
                 n_ += 1
             else:
-                limit_multiple += 1.
+                limit_multiple *= 1.5
                 
 
         s_mean = 0.
@@ -441,18 +445,20 @@ def step_noise_1(line_search_func, model, noise_real, N, n_control_vars, T, dt, 
 def step_noise_2(line_search_func, model, noise_real, N, n_control_vars, T, dt, state0_, target_state_,
                             best_control_, d_, ip_, ie_, is_, cost_init, startstep_,
                             cntrl_max_, cntrl_min_, prec_vars, grad1_, init_vars_, startind_):
-    
+
     s_, tc_, ss_ = line_search_func(model, N, n_control_vars, T, dt, state0_, target_state_,
                             best_control_, d_, ip_, ie_, is_, start_step_ = startstep_, max_it_ = 500,
                             max_control_ = cntrl_max_, min_control_ = cntrl_min_, variables_ = prec_vars, grad_ = grad1_, noise_real=noise_real, init_vars=init_vars_, startind_=startind_)
+
+    #print(s_)
+    #print(tc_)
+    #print(ss_)
 
     return s_, tc_, ss_
 
 def get_step_noise(line_search_func, model, N, n_control_vars, T, dt, noise_real, state0_, target_state_,
                     best_control_, dir0_, ip_, ie_, is_, startstep_exc_, startstep_inh_, start_step_noise_, cntrl_max_,
                     cntrl_min_, grad1_, cost_init, init_vars, startind, prec_vars=[0], control_vars=[0,1], separate_comp=True, noise_in_step_comp = False):
-
-    #print(separate_comp, noise_in_step_comp)
             
     if separate_comp:
         # compute stepsize separately and then put together
@@ -531,6 +537,11 @@ def get_step_noise(line_search_func, model, N, n_control_vars, T, dt, noise_real
         #    cost_ = cost_init
 
         #else:
+        #print(tc_exc)
+        #print(tc_inh)
+        #print(tc_noise)
+        #print(cost_min, mean_cost_exc, mean_cost_inh, mean_cost_)
+
         if cost_min ==  mean_cost_exc:
             #print("choose exc only")
             step_ = s_exc
@@ -598,8 +609,8 @@ def set_pre_post(i1, i2, bc_, bs_, best_control_, state_pre_, state_, state_post
 def check_pre(i1, bs_, state_, state_vars, a, b):
     for n in range(bs_.shape[0]):
         for v in range(bs_.shape[1]):
-            if ( state_vars[v] == "Vmean_exc" and (a == 0. or b == 0.) ):
-                if np.abs(bs_[n,v,i1] - state_[n,v,0]) > 1e-1:
+            if state_vars[v] == "Vmean_exc":
+                if np.abs(bs_[n,v,i1] - state_[n,v,0]) > 1.:
                     logging.error("Problem in initial value trasfer pre")
                     print("Problem in initial value trasfer pre: ", state_vars[v], bs_[n,v,i1], state_[n,v,0])
             elif np.abs(bs_[n,v,i1] - state_[n,v,0]) > 1e-8:
@@ -609,8 +620,8 @@ def check_pre(i1, bs_, state_, state_vars, a, b):
 def check_post(i2, bs_, state_post_, state_vars, a, b):
     for n in range(bs_.shape[0]):
         for v in range(bs_.shape[1]):
-            if state_vars[v] == "Vmean_exc" and (a == 0. or b == 0.):
-                if np.abs(bs_[n,v,-i2-1] - state_post_[n,v,0]) > 1e-1:
+            if state_vars[v] == "Vmean_exc":
+                if np.abs(bs_[n,v,-i2-1] - state_post_[n,v,0]) > 1.:
                     logging.error("Problem in initial value trasfer post")
                     print("Problem in initial value trasfer post: ", state_vars[v], bs_[n,v,-i2-1], state_post_[n,v,0])
             elif np.abs(bs_[n,v,-i2-1] - state_post_[n,v,0]) > 1e-8:

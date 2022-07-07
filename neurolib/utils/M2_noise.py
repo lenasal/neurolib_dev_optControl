@@ -18,8 +18,13 @@ VALID_VAR = {None, "HS", "FR", "PR", "CD", "LS", "DY", "WYL", "HZ"}
 VALID_LS = {None, "AG"}
 
 def M2(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_, u_scheme_, max_iteration_, tolerance_, startStep_,
-       cntrl_max_, cntrl_min_, t_sim_, t_sim_pre_, t_sim_post_,
+       cntrl_max_, cntrl_min_, t_sim_, t_sim_pre_, t_sim_post_, method_step,
        CGVar = None, line_search_ = None, control_variables_ = [0,1], prec_variables_ = [0,1], separate_comp = True, transition_time_ = 0.):
+
+    if method_step == 'S1':
+        noise_in_step_comp_=False
+    elif method_step == 'S2':
+        noise_in_step_comp_=True
         
     dt = model.params['dt']
     max_iteration_ = int(max_iteration_)
@@ -45,6 +50,7 @@ def M2(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
     
     V = len(state_vars)
     V_target = target_state_.shape[1]
+    v_control = control_.shape[1]
     i=0
        
     ##############################################
@@ -196,6 +202,7 @@ def M2(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
     best_control_mean_ /= noise_real
 
     ip_, ie_, is_ = cost.getParams()
+    ira_ = cost.getParam_r()
 
     # set precision penalty to zero for transition time
     for t_ in range(T):
@@ -207,8 +214,10 @@ def M2(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
     total_cost_ = np.zeros(( noise_real, max_iteration_+1 ))
     total_cost_mean_std = np.zeros(( max_iteration_+1, 2 ))
     for noise_ in range(noise_real):
-        total_cost_[noise_,i] = cost.f_int(N, n_control_vars, T, dt, state0_[noise_,:,:,:], target_state_, best_control_mean_,
+        total_cost_[noise_,i] = ( cost.f_int(N, n_control_vars, T, dt, state0_[noise_,:,:,:], target_state_, best_control_mean_,
                                 ip_, ie_, is_, v_ = prec_variables )
+                                #+ cost.cost_ra_int(N, v_control, T, dt, ira_, best_control_)
+                                )
         
     total_cost_mean_std[i,0] = np.mean( total_cost_[:,i] )
     total_cost_mean_std[i,1] = np.std( total_cost_[:,i] )
@@ -259,10 +268,12 @@ def M2(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
         grad1_ = np.zeros(( N, n_control_vars, T ))
 
         for noise_ in range(noise_real):
-        
+
+            #print("realization ", noise_)
+
             for ind_time in range(T):
                 #f_p_grad_t_ = cost.cost_precision_gradient_t2(N, V_target, T, ind_time, state0_[:,:2,ind_time], target_state_[:,:,ind_time], ip_)
-                f_p_grad_t_ = cost.cost_precision_gradient_t(N, V_target, state0_[noise_,:,:2,ind_time], target_state_[:,:,ind_time], ip_, transition_time_)
+                f_p_grad_t_ = cost.cost_precision_gradient_t(N, V_target, state0_[noise_,:,:2,ind_time], target_state_[:,:,ind_time], ip_)
 
                 for v in prec_variables:
                     full_cost_grad[0,v,ind_time] = f_p_grad_t_[0,v] 
@@ -397,12 +408,18 @@ def M2(model, noise_real, init_params, control_, target_state, c_scheme_, u_mat_
             state_noise = [ None ]
             state_noise[0] = state0_[noise_]
 
+            #print("step")
+
             step_, dir0_, cost_ = fo.get_step_noise(line_search_func, model, N, n_control_vars, T, dt, 1, state_noise, target_state_,
                         best_control_mean_, dir0_, ip_, ie_, is_, startstep_exc_, startstep_inh_, start_step_noise_, cntrl_max_,
-                        cntrl_min_, grad1_, total_cost_[noise_,i-1], init_vars_sim, startind_, prec_vars=prec_variables, control_vars=control_variables, separate_comp=True, noise_in_step_comp = False)
+                        cntrl_min_, grad1_, total_cost_[noise_,i-1], init_vars_sim, startind_, prec_vars=prec_variables, control_vars=control_variables, separate_comp=True, noise_in_step_comp = noise_in_step_comp_)
             
-            #print("std dev of cost ", np.std(cost_), np.std(cost_)/np.mean(cost_))
-            total_cost_[noise_,i] = cost_[0]
+            #print("step")
+
+            if isinstance(cost_, float):
+                total_cost_[noise_,i] = cost_
+            else:
+                total_cost_[noise_,i] = cost_[0]
             if noise_ == noise_real - 1:
                 runtime_[i] = timer() - runtime_start_
 

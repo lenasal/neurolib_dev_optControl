@@ -84,15 +84,22 @@ def get_rgb_string_from_rgba(rgba_val):
 
 cmap=cm.get_cmap('tab10')
 
-darkgrey = 'rgb(100,100,100)'
-midgrey = 'rgb(200,200,200)'
-lightgrey='rgb(250,250,250)'
+darkgrey_rgba = [100/255., 100/255., 100/255., 1.]
+midgrey_rgba = [200/255., 200/255.,200/255., 1.]
+lightgrey_rgba = [230/255., 230/255., 230/255., 1.]
+
+darkgrey = get_rgb_string_from_rgba(darkgrey_rgba)
+midgrey = get_rgb_string_from_rgba(midgrey_rgba)
+lightgrey = get_rgb_string_from_rgba(lightgrey_rgba)
 color_bi_updown = get_rgb_string_from_rgba(cmap(9))
 color_LC = get_rgb_string_from_rgba(cmap(8))
 color_bi_uposc = get_rgb_string_from_rgba(cmap(6))
 
 def getcolors():
     return darkgrey, midgrey, lightgrey, color_bi_updown, color_LC, color_bi_uposc
+
+def getcolors_rgba():
+    return darkgrey_rgba, midgrey_rgba, lightgrey_rgba, cmap(9), cmap(8), cmap(6)
 
 def getcolormap():
     return cmap
